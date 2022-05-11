@@ -1,6 +1,6 @@
-# Install textblob
+# Install packages
 ```bash
-pip install -U textblob
+pip install -U textblob python-docx
 python -m textblob.download_corpora
 ```
 # Run
