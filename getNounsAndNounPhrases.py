@@ -63,4 +63,4 @@ if len(argv) > 1:
 			print("\t%d: %s" % (i,nounP))
 			i = i + 1
 else:
-	print("Usage:\n\t %s input.txt" % argv[0].split('\\')[-1])
+	print("Usage:\n\t %s input\nSupports: .docx, .doc, .txt" % argv[0].split('\\')[-1])
