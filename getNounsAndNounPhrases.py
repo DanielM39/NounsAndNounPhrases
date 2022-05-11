@@ -3,7 +3,7 @@ from textblob import TextBlob
 from sys import argv
 import docx
 
-def getText(filename):
+def getTextDocx(filename):
 	doc = docx.Document(filename)
 	fullText = []
 	for para in doc.paragraphs:
@@ -13,6 +13,13 @@ def getText(filename):
 			for cel in row.cells:
 				fullText.append(cel.text)
 	return '\n'.join(fullText)
+
+def getTextTxt(filename):
+	txt = ""
+	with open(filename, 'r', encoding='utf8') as f:
+			for line in f:
+				txt = txt + ' ' + line
+	return txt
 
 EXCLUTIONS = ["preconditions", "post-conditions", "scenario", "actor", "yyyy/mm/dd", "extensions", "merges", "step",
 	"case document name", "alternative path", "ui actions", "primary actor", "customer stakeholders", "main success",
@@ -25,11 +32,9 @@ def remove_duplicates(words):
 if len(argv) > 1:
 	txt = ""
 	if argv[1].lower().endswith(".docx"):
-		txt = getText(argv[1])
+		txt = getTextDocx(argv[1])
 	else:
-		with open(argv[1], 'r', encoding='utf8') as f:
-			for line in f:
-				txt = txt + ' ' + line
+		txt = getTextTxt(argv[1])
 	
 	blob = TextBlob(txt)
 	
