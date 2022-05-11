@@ -2,6 +2,9 @@
 from textblob import TextBlob
 from sys import argv
 
+def remove_duplicates(words):
+	return list(dict.fromkeys(words))
+
 if len(argv) > 1:
 	txt = ""
 	with open(argv[1], 'r', encoding='utf8') as f:
@@ -11,12 +14,12 @@ if len(argv) > 1:
 	
 	i = 1
 	print("Nouns:")
-	for noun in blob.noun_phrases:
+	for noun in remove_duplicates(blob.noun_phrases):
 		if ' ' not in noun:
 			print("\t%d: %s" % (i,noun))
 			i = i + 1
 	print("Noun Phrases:")
-	for nounP in blob.noun_phrases:
+	for nounP in remove_duplicates(blob.noun_phrases):
 		if ' ' in nounP:
 			print("\t%d: %s" % (i,nounP))
 			i = i + 1
