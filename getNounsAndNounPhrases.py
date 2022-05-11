@@ -1,6 +1,14 @@
 #! python3.9
 from textblob import TextBlob
 from sys import argv
+import docx
+
+def getText(filename):
+    doc = docx.Document(filename)
+    fullText = []
+    for para in doc.paragraphs:
+        fullText.append(para.text)
+    return '\n'.join(fullText)
 
 EXCLUTIONS = ["preconditions", "post-conditions", "scenario", "actor", "yyyy/mm/dd", "extensions", "merges", "step",
 	"case document name", "alternative path" "ui actions", "primary actor", "customer stakeholders", "main success",
@@ -12,9 +20,13 @@ def remove_duplicates(words):
 
 if len(argv) > 1:
 	txt = ""
-	with open(argv[1], 'r', encoding='utf8') as f:
-		for line in f:
-			txt = txt + ' ' + line
+	if argv[1].lower().endswith(".docx"):
+		txt = getText(argv[1])
+	else:
+		with open(argv[1], 'r', encoding='utf8') as f:
+			for line in f:
+				txt = txt + ' ' + line
+	
 	blob = TextBlob(txt)
 	
 	i = 1
