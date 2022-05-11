@@ -1,6 +1,6 @@
 #! python3.9
 from textblob import TextBlob
-from sys import argv
+from sys import argv, platform
 import docx
 
 def getTextDocx(filename):
@@ -13,6 +13,17 @@ def getTextDocx(filename):
 			for cel in row.cells:
 				fullText.append(cel.text)
 	return '\n'.join(fullText)
+
+def getTextDoc(filename):
+	import win32com.client
+
+	word = win32com.client.Dispatch("Word.Application")
+	word.visible = False
+	wb = word.Documents.Open(filename)
+	doc = word.ActiveDocument
+	txt = doc.Range().Text
+	wb.Close()
+	return txt
 
 def getTextTxt(filename):
 	txt = ""
@@ -33,6 +44,8 @@ if len(argv) > 1:
 	txt = ""
 	if argv[1].lower().endswith(".docx"):
 		txt = getTextDocx(argv[1])
+	elif argv[1].lower().endswith(".doc") and platform == "win32":
+		txt = getTextDoc(argv[1])
 	else:
 		txt = getTextTxt(argv[1])
 	
@@ -41,12 +54,12 @@ if len(argv) > 1:
 	i = 1
 	print("Nouns:")
 	for noun in remove_duplicates(blob.noun_phrases):
-		if (' ' not in noun) and (noun.strip().lower() not in EXCLUTIONS):
+		if (' ' not in noun) and (noun.strip().lower() not in EXCLUTIONS) and (not noun.strip().isnumeric()):
 			print("\t%d: %s" % (i,noun))
 			i = i + 1
 	print("Noun Phrases:")
 	for nounP in remove_duplicates(blob.noun_phrases):
-		if (' ' in nounP) and (nounP.strip().lower() not in EXCLUTIONS):
+		if (' ' in nounP) and (nounP.strip().lower() not in EXCLUTIONS) and (not nounP.strip().isnumeric()):
 			print("\t%d: %s" % (i,nounP))
 			i = i + 1
 else:
