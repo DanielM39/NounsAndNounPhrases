@@ -1,18 +1,12 @@
 #! python3.9
-from textblob import TextBlob
 from sys import argv
+import Nouns
 
-def remove_duplicates(words):
-	return list(dict.fromkeys(words))
+blob = Nouns.parse(argv)
 
-if len(argv) > 1:
-	txt = ""
-	with open(argv[1], 'r', encoding='utf8') as f:
-		for line in f:
-			txt = txt + ' ' + line
-	blob = TextBlob(txt)
-	#print(blob.noun_phrases)
+if blob is not None:
 	i = 1
-	for nounP in remove_duplicates(blob.noun_phrases):
-		print("%d: %s" % (i,nounP))
-		i = i + 1
+	for nounP in Nouns.remove_duplicates(blob.noun_phrases):
+		if (nounP.strip().lower() not in Nouns.EXCLUTIONS) and (not nounP.strip().isnumeric()):
+			print("%d: %s" % (i,nounP.title()))
+			i = i + 1
