@@ -51,5 +51,16 @@ def parse(argv):
 			txt = getTextTxt(argv[1])
 		return TextBlob(txt)
 	else:
-		print("Usage:\n\t %s input\nSupports: .docx, .doc, .txt\n(.doc only works on windows)" % argv[0].split('\\')[-1])
+		print("Usage:\n\t %s input\nSupports: .docx, .doc (only on windows), or a plain text file (.txt)" % argv[0].split('\\')[-1])
 		return None
+
+if __name__ == "__main__":
+	print("This is the Nouns module not a program.\n")
+	with open("README.md", 'r', encoding="utf8") as readme:
+		skip = True
+		for line in readme:
+			if skip:
+				if line.strip() == "# Run":
+					skip = False
+			else:
+				print(line.replace('#','').replace('```bash','').replace('`','').strip())
